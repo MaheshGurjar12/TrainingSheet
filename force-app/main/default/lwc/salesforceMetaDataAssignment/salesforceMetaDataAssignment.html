@@ -1,0 +1,43 @@
+<template>
+
+    <!--dropDown for all sobjects using combobox-->
+    <div class="slds-box" style="background-color: white;">
+    <lightning-card>
+        <lightning-combobox name="progress" value={selectedObject} label="All Objects" placeholder="Select an Object"
+            options={objects} onchange={displayFields}></lightning-combobox>
+    </lightning-card>
+
+    <!--duallist-box for objects' fields-->
+    <template lwc:if={cardVisible}>
+        <lightning-dual-Listbox name="progress" label="Select Fields" source-label="Available Options"
+            selected-label="Selected" options={fields} value={selectedvalues} onchange={dualChange}>
+        </lightning-dual-Listbox></template>
+
+
+    <!--button to create soql query-->
+    <template lwc:if={buttonVisible}>
+        <div class="slds-col slds-size_12-of-12 slds-align_absolute-center">
+        <lightning-button variant="brand-outline" label="Generate SOQL Query" onclick={createQuery}
+            class="slds-m-left_x-small"></lightning-button></div>
+    </template>
+
+
+    <!--textArea for SOQL Query-->
+    <template lwc:if={textAreaVisible}>
+        <lightning-textarea name="textArea" label="textArea for SOQL Query" value={soqlQuery}
+            placeholder="Create SOQL Query"></lightning-textarea>
+    </template>
+
+
+    <!--button to create table-->
+    <template lwc:if={tableButton}>
+        <div class="slds-col slds-size_12-of-12 slds-align_absolute-center">
+        <lightning-button variant="brand-outline" label="Generate Table" onclick={getTable}
+            class="slds-m-left_x-small"></lightning-button>
+        </div>
+    </template>
+    <!--table to disply all fields data-->
+    <lightning-datatable key-field="id" data={tableData} columns={objtableColumns}>
+    </lightning-datatable>
+</div>
+</template>
