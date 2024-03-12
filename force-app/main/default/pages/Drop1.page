@@ -1,0 +1,35 @@
+<apex:page controller="DropDownController" sidebar="false" showHeader="false">
+    <apex:form id="form">
+        <apex:selectList value="{!selectedValue}" size="1">
+            <apex:selectOptions value="{!dropdownOptions}" />
+            <apex:actionSupport event="onchange" action="{!fetchMentors}" rerender="outerContainer"/>
+        </apex:selectList>
+        
+        <!-- mentors table -->
+        <apex:outputPanel id="outerContainer" >
+            <apex:outputPanel id="mentorTable" rendered="{!NOT(ISNULL(mentors))}">
+                <apex:dataTable value="{!mentors}" var="mentor" border="1" rendered="{!if(selectedValue=='',false,true)}">
+                    <apex:column headerValue="Name">
+                        <apex:commandLink action="{!fetchStudents}" reRender="student_table" value="{!mentor.Name} ">
+                            <apex:param name="mentorId" value="{!mentor.Id}" assignTo="{!selectedMentorId}" ></apex:param>
+                        </apex:commandLink>
+                        <!--students table-->
+                        <apex:outputPanel id="student_table">
+                            <apex:dataTable value="{!students}" var="student" border="1"  rendered="{!NOT(ISNULL(students))}">
+                                <apex:column headerValue="Name" value="{!student.Name}" />
+                                <apex:column headerValue="Class" value="{!student.Class__c}" />
+                                <apex:column headerValue="City" value="{!student.City__c}" />
+                                <apex:column headerValue="State" value="{!student.State__c}" />
+                            </apex:dataTable> 
+                        </apex:outputPanel>
+                    </apex:column>
+                    <apex:column headerValue="Designation" value="{!mentor.Designation__c}"/>
+                    <apex:column headerValue="Student Number" value="{!mentor.Student_Number__c}"/>
+                </apex:dataTable>
+            </apex:outputPanel>
+            
+            
+            
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>
