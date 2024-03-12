@@ -1,0 +1,49 @@
+<aura:component controller = "InstituteAuraController">
+    <aura:attribute name = "recordId" type = "Id"/>
+    <aura:attribute name = "selectedMentorId" type = "Id"/>
+    <aura:attribute name = "mentorLabel" type = "List"/>
+    <aura:attribute name = "instituteList" type = "List"/>
+    <aura:attribute name="Mentors" type= "Mentor2__c"/>
+    <aura:attribute name="students" type= "Student1__c"/>
+    <aura:attribute name = "studentLabel" type = "List"/>
+    <aura:attribute name = "selectedRows" type = "List"/>
+    
+    <aura:attribute name="selectedOption" type="String" default="null"/>
+    <aura:attribute name="showTable" type="Boolean" default="false"/>
+    
+    <aura:handler name = "init" value = "{!this}" action = "{!c.doInit}"/>
+    
+    <!--institutes dropdown-->
+    <lightning:select aura:id = "select1" name = "select1" label="" onchange = "{!c.getMentorTable}">
+        <option value = "null">Select an Institute</option>
+        <aura:iteration items = "{!v.instituteList}" var = "item">
+            <option value = "{!item.Id}">{!item.Name}</option>
+        </aura:iteration>
+    </lightning:select>
+    
+    <!--mentor table -->
+    <aura:if isTrue="{!not(empty(v.recordId))}">
+     <aura:if isTrue="{!v.showTable}">
+        <lightning:card>
+            <lightning:datatable data="{!v.Mentors}" 
+                                 columns="{!v.mentorLabel}"
+                                 keyField = "Id"
+                                 hideCheckboxColumn="false"
+                                 selectedRows="{! v.selectedRows }"
+                                 onrowselection="{!c.handleRowAction}"/>
+        </lightning:card>
+    </aura:if>
+    </aura:if>
+    
+    <!-- Display student table if a mentor is selected-->
+    <aura:if isTrue="{!not(empty(v.studentLabel))}">
+        <lightning:card>
+            <lightning:datatable aura:id="studentTable"
+                                 data="{!v.students}"  
+                                 columns="{!v.studentLabel}"
+                                 keyField = "Id"
+                                 hideCheckboxColumn="true"/>
+        </lightning:card>
+    </aura:if>
+   
+</aura:component>
