@@ -1,0 +1,55 @@
+<aura:component controller="salesforceMetaAssignmentAura" >
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="fields" type="List"/>
+    <aura:attribute name="tableLabel" type="List"/>
+    <aura:attribute name="tableData" type="List"/>
+    <aura:attribute name="selectedValue" type="string"/>
+    <aura:attribute name="selectedValues" type="List"/>
+    <aura:attribute name="textAreaValues" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--picklist for all the objects-->
+    <div class="slds-box" style="background-color: white;">
+        <lightning:select aura:id="objects"  name="objects" label="Select an Object"  value="{!v.selectedValue}" onchange="{!c.displayFields}">
+            <!--<option value="null" text="Choose an Object"/>-->
+            <aura:iteration items="{!v.options}" var="object">
+                <option value="{!object}" text="{!object}"/>
+            </aura:iteration>
+        </lightning:select>
+        
+        <!--combobox for multi-select functionality-->
+        <aura:if isTrue="{!not(empty(v.selectedValue))}">
+            <lightning:dualListbox name="progress"
+                                   label="Select Fields"
+                                   sourceLabel="Available"
+                                   selectedLabel="Selected"
+                                   options="{!v.fields}"
+                                   value="{!v.selectedValues}"
+                                   /></aura:if>
+        
+        <!--button to create soql query-->
+        <aura:if isTrue="{!not(empty(v.selectedValues))}">
+                    <div class="slds-col slds-size_12-of-12 slds-align_absolute-center">
+                        <lightning:button label="Create Query" variant="brand" onclick="{! c.queryCreate }" /></div>
+        </aura:if>
+        
+        <!--textArea for soql query-->
+        <aura:if isTrue="{!not(empty(v.textAreaValues))}">
+            <lightning:textarea  aura:id="mytextarea" placeholder="SOQL Query" label="SOQL Query" value = "{!v.textAreaValues}" maxlength="300" />
+            
+            <!--button to create table based on selected fields in dual-listbox-->
+            <div class="slds-col slds-size_12-of-12 slds-align_absolute-center">
+                <lightning:button label="Create table" variant="brand" onclick="{! c.tableCreate }" /></div>
+        </aura:if>
+        
+        <!--Display table of all the selected records in duallist-box-->
+        <aura:if isTrue="{!not(empty(v.tableLabel))}">
+            <lightning:card>
+                <lightning:datatable data="{!v.tableData}" 
+                                     columns="{!v.tableLabel}"
+                                     keyField = "Id"
+                                     hideCheckboxColumn="false"/>
+            </lightning:card>
+        </aura:if></div>
+    
+</aura:component>
